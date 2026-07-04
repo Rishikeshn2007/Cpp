@@ -4,7 +4,6 @@ class Engine
 {
     private:
     int board[3][3];
-    bool win=false;
 
     public:
     //Constructor to initialize board weights to -1
@@ -20,9 +19,27 @@ class Engine
     bool validate(int x,int y);
     int trace();
     void play();
+    bool draw();
 
 
 };
+
+//To detect a draw
+bool Engine::draw()
+{
+    int i,j;
+    for(i=0;i<3;i++)
+    {
+        for(j=0;j<3;j++)
+        {
+            if(board[i][j]==-1)
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
 
 //Validation function which validates the playes choices
 bool Engine::validate(int x,int y)
@@ -36,14 +53,16 @@ bool Engine::validate(int x,int y)
 //To check the game winning case
 int Engine::trace()
 {
+    
     int sum=0;
     for(int i=0;i<3;i++)
     {
+        sum=0;
         for(int j=0;j<3;j++)
         sum+=board[i][j];
         if(sum==3)
         return 1;
-        else if(sum==6)
+        if(sum==6)
         return 2;
     }
     for(int i=0;i<3;i++)
@@ -53,20 +72,20 @@ int Engine::trace()
         sum+=board[j][i];
         if(sum==3)
         return 1;
-        else if(sum==6)
+        if(sum==6)
         return 2;
     }
     sum=0;
     sum=board[0][0]+board[1][1]+board[2][2];
     if(sum==3)
     return 1;
-    else if(sum==6)
+    if(sum==6)
     return 2;
     sum=0;
     sum=board[0][2]+board[1][1]+board[2][0];
     if(sum==3)
     return 1;
-    else if(sum==6)
+    if(sum==6)
     return 2;
 
     return 0;
@@ -77,7 +96,7 @@ void Engine::play()
 {
     int turn=0;
     int x,y;
-    while(!win)
+    while(!draw())
     {
         if(turn%2==0)
         {
@@ -126,6 +145,8 @@ void Engine::play()
         }
         turn++;
     }
+    std::cout<<"\n==DRAW MATCH==\n";
+    return;
 }
 
 //FUnction which draws the board
