@@ -1,5 +1,10 @@
+//C++ ===== Death
+//LIFE IS HERDDDDDDDDDDDD
+//I am switching to pythonnnnnnn
 #include <iostream>
 #include <vector>
+#include <math.h>
+#include <algorithm>
 #define p1 -1
 #define p2 1
  class Ai_Engine
@@ -20,13 +25,92 @@
     }
     void draw_board();
     bool valied(int x,int y);
-    void minmax();
+    int minmax(bool is_ai);
     int win();
     void play();
     bool draw();
 
  };
 
+
+int Ai_Engine::minmax(bool is_ai)
+{
+    int i,j,best_score;
+    std::vector<int> scores;
+    std::vector<int> move_x;
+    std::vector<int> move_y;
+    if(is_ai)
+    {
+        for(i=0;i<3;i++)
+        {
+            for(j=0;j<3;j++)
+            {
+                if(valied(i,j))
+                {
+                    board[i][j]=p2;
+                    if(win()==p1)
+                    {
+                        board[i][j]=0;
+                        scores.push_back(-1);
+                        move_x.push_back(i);
+                        move_y.push_back(j);
+                    }
+                    if(win()==p2)
+                    {
+                        board[i][j]=0;
+                        scores.push_back(1);
+                        move_x.push_back(i);
+                        move_y.push_back(j);
+                    }
+                    if(draw())
+                    {
+                        board[i][j]=0;
+                        scores.push_back(0);
+                        move_x.push_back(i);
+                        move_y.push_back(j);
+                    }
+                    minmax(false);
+                }
+            }
+        }
+        best_score=-2;
+        for(int k:scores)
+        {
+            if(best_score>k)
+            best_score=k;
+        }
+        auto index=std::find(scores.begin(),scores.end(),best_score);
+        int x=move_x[index];
+        int y=move_y[index];
+        board[x][y];
+    }
+    for(i=0;i<3;i++)
+        {
+            for(j=0;j<3;j++)
+            {
+                if(valied(i,j))
+                {
+                    board[i][j]=p2;
+                    if(win()==p1)
+                    {
+                        board[i][j]=0;
+                        return -1;
+                    }
+                    if(win()==p2)
+                    {
+                        board[i][j]=0;
+                        return 1;
+                    }
+                    if(draw())
+                    {
+                        board[i][j]=0;
+                        return 0;
+                    }
+                    minmax(true);
+                }
+            }
+        }
+}
 
 int Ai_Engine::win()
 {
@@ -114,7 +198,7 @@ void Ai_Engine::play()
         }
         else
         {
-            //computers turn
+            //AI code
         }
         count++;
     }
